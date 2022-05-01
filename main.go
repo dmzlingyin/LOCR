@@ -19,11 +19,10 @@ var (
 )
 
 func init() {
-	flag.StringVar(&configPath, "config", "./config.yaml", "please specify config pagh")
-	flag.BoolVar(&version, "version", false, "show version")
+	flag.StringVar(&configPath, "p", "./config.yaml", "specify config file path")
+	flag.BoolVar(&version, "v", false, "show current version of locr")
 	flag.Parse()
 	viper.SetConfigFile(configPath)
-
 }
 
 func main() {
@@ -33,7 +32,7 @@ func main() {
 
 	if version {
 		fmt.Println(VERSION)
-		os.Exit(0)
+		return
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
