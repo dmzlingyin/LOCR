@@ -1,0 +1,5 @@
+# 设置OCR识别后台接口
+ocrserver: "xxx"
+
+# 设置开机自启
+start-up: true
