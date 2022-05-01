@@ -13,7 +13,7 @@ LOCR(Lightweight OCR)是一款轻量级的文字识别工具, 结合第三方截
 
 # 本项目的目标
 
-本项目预期实现一个轻量但强大的命令行OCR工具, 简单快速地(选中识别区域->粘贴到剪贴板->粘贴到你想要的任何地方)(需结合第三方截图软件, e.g. Windows: Snipaste, Linux: Flameshot)实现图片文字提取及识别。
+本项目预期实现一个轻量但强大的命令行OCR工具, 简单快速地(选中识别区域->复制到剪贴板->粘贴到你想要的任何地方)(需结合第三方截图软件, e.g. Windows: [Snipaste](https://www.snipaste.com/), Linux: [Flameshot](https://flameshot.org/))实现图片文字提取及识别。
 
 # 待实现的功能
 
