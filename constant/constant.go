@@ -9,11 +9,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type ocrServer struct {
-	Addr string
-	Port string
-}
-
 const (
 	VERSION = "0.1.0"
 )
@@ -22,10 +17,10 @@ var (
 	PNG        = []byte{137, 80, 78, 71, 13, 10, 26, 10}
 	configPath string
 	version    bool
-	OcrServer  *ocrServer
+	URL        string
 )
 
-func Init() {
+func init() {
 	flag.StringVar(&configPath, "p", "./pconfig.yaml", "specify config file path")
 	flag.BoolVar(&version, "v", false, "show current version of locr")
 	flag.Parse()
@@ -48,12 +43,7 @@ func Init() {
 		}
 		os.Exit(1)
 	}
-	OcrServer = NewOcrServer()
-}
-
-func NewOcrServer() *ocrServer {
-	return &ocrServer{
-		Addr: viper.GetStringMapString("ocrserver")["address"],
-		Port: viper.GetStringMapString("ocrserver")["port"],
-	}
+	addr := viper.GetStringMapString("ocrserver")["address"]
+	port := viper.GetStringMapString("ocrserver")["port"]
+	URL = addr + ":" + port + "/"
 }

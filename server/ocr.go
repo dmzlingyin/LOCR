@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	C "locr/constant"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -33,7 +34,7 @@ func RecoFile(file *os.File) (*Content, error) {
 	writer.Close()
 
 	// 构造request
-	req, err := http.NewRequest("POST", "http://172.17.130.166:8086/file", body)
+	req, err := http.NewRequest("POST", C.URL+"file", body)
 	req.Header.Add("Content-Type", writer.FormDataContentType())
 	if err != nil {
 		return nil, err
@@ -74,7 +75,7 @@ func RecoBase64(img []byte) (*Content, error) {
 	}
 
 	// 构造request
-	req, err := http.NewRequest("POST", "http://172.17.130.166:8086/base64", bytes.NewBuffer(byteBody))
+	req, err := http.NewRequest("POST", C.URL+"base64", bytes.NewBuffer(byteBody))
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +86,6 @@ func RecoBase64(img []byte) (*Content, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	fmt.Println(resp)
 
 	rbody, err := io.ReadAll(resp.Body)
 	if err != nil {
