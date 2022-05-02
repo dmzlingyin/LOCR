@@ -15,6 +15,18 @@ LOCR(Lightweight OCR)是一款轻量级的文字识别工具, 结合第三方截
 
 本项目预期实现一个轻量但强大的命令行OCR工具, 简单快速地(选中识别区域->复制到剪贴板->粘贴到你想要的任何地方)(需结合第三方截图软件, e.g. Windows: [Snipaste](https://www.snipaste.com/), Linux: [Flameshot](https://flameshot.org/))实现图片文字提取及识别。
 
+# 依赖
+1. go1.16+
+2. OCR服务器(离线版本不需要), [ocrserver](https://github.com/otiai10/ocrserver)
+
+# 使用
+```go
+git clone https://github.com/dmzlingyin/LOCR.git
+cd LOCR
+go build
+./locr
+```
+
 # 待实现的功能
 
 - [x] 识别剪贴板的图片, 将识别结果自动存入剪贴板
