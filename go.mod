@@ -3,6 +3,7 @@ module locr
 go 1.17
 
 require (
+	github.com/otiai10/gosseract/v2 v2.3.1
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	golang.design/x/clipboard v0.6.2
