@@ -16,6 +16,8 @@ type Content struct {
 	Version string
 }
 
+// RecoFile 根据图片path进行识别
+// 适用于图片复制场景(非截图)
 func RecoFile(file *os.File) (*Content, error) {
 	// 构造form-data
 	body := &bytes.Buffer{}
@@ -51,6 +53,8 @@ func RecoFile(file *os.File) (*Content, error) {
 	return &content, nil
 }
 
+// RecoBase64 识别剪贴板的图片
+// 适用于截图场景
 func RecoBase64() bool {
 	return true
 }
