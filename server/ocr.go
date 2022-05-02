@@ -5,8 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"image"
-	"image/png"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -17,6 +15,11 @@ import (
 type Content struct {
 	Result  string
 	Version string
+}
+
+type ShotEncode struct {
+	Base64 string `json:"base64"`
+	Trim   string `json:"trim"`
 }
 
 // RecoFile 根据图片path进行识别
@@ -59,19 +62,19 @@ func RecoFile(file *os.File) (*Content, error) {
 // RecoBase64 识别剪贴板的图片
 // 适用于截图场景
 func RecoBase64(img []byte) (*Content, error) {
-	image, _, err := image.Decode(bytes.NewBuffer(img))
+	// 对截图base64编码
+	body := base64.StdEncoding.EncodeToString(img)
+	shotEncode := ShotEncode{
+		Base64: body,
+		Trim:   "\n",
+	}
+	byteBody, err := json.Marshal(shotEncode)
 	if err != nil {
 		return nil, err
 	}
-	var buff bytes.Buffer
-	err = png.Encode(&buff, image)
-	if err != nil {
-		return nil, err
-	}
-	body := base64.StdEncoding.EncodeToString(buff.Bytes())
-	fmt.Println(body)
+
 	// 构造request
-	req, err := http.NewRequest("POST", "http://172.17.130.166:8086/base64", bytes.NewReader([]byte(body)))
+	req, err := http.NewRequest("POST", "http://172.17.130.166:8086/base64", bytes.NewBuffer(byteBody))
 	if err != nil {
 		return nil, err
 	}
