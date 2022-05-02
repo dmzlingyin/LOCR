@@ -2,8 +2,11 @@ package server
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/png"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -55,8 +58,44 @@ func RecoFile(file *os.File) (*Content, error) {
 
 // RecoBase64 识别剪贴板的图片
 // 适用于截图场景
-func RecoBase64() bool {
-	return true
+func RecoBase64(img []byte) (*Content, error) {
+	image, _, err := image.Decode(bytes.NewBuffer(img))
+	if err != nil {
+		return nil, err
+	}
+	var buff bytes.Buffer
+	err = png.Encode(&buff, image)
+	if err != nil {
+		return nil, err
+	}
+	body := base64.StdEncoding.EncodeToString(buff.Bytes())
+	fmt.Println(body)
+	// 构造request
+	req, err := http.NewRequest("POST", "http://172.17.130.166:8086/base64", bytes.NewReader([]byte(body)))
+	if err != nil {
+		return nil, err
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	fmt.Println(resp)
+
+	rbody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var content Content
+	err = json.Unmarshal(rbody, &content)
+	if err != nil {
+		return nil, err
+	}
+	return &content, nil
 }
 
 func Status() error {
