@@ -21,7 +21,11 @@ LOCR(Lightweight OCR)是一款轻量级的文字识别工具, 结合第三方截
 
 # 依赖
 1. go1.16+
-2. OCR服务器(离线版本不需要), [ocrserver](https://github.com/otiai10/ocrserver)
+2. OCR服务器(离线版本不需要), 多种OCR实现可选：
+   1. [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
+   2. [tesseract](https://github.com/tesseract-ocr/tesseract)
+   3. [EasyOCR](https://github.com/JaidedAI/EasyOCR)
+   4. [ocrserver](https://github.com/otiai10/ocrserver)
 
 # 使用
 ```go
