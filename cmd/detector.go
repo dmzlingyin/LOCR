@@ -45,8 +45,6 @@ func (img *ImageDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		text := clipboard.Watch(ctx, clipboard.FmtText)
 		img.Data = string(<-text)
-		fmt.Println("img changed..........................")
-		fmt.Println(img.Data)
 		img.Recognation()
 
 		cancel()
@@ -74,7 +72,6 @@ func (shot *ShotDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		img := clipboard.Watch(ctx, clipboard.FmtImage)
 		shot.Data = <-img
-		fmt.Println("shot changed..........................")
 		shot.Recognation()
 
 		cancel()
