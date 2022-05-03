@@ -23,6 +23,7 @@ LOCR(Lightweight OCR)是一款轻量级的文字识别工具, 结合第三方截
 ```go
 git clone https://github.com/dmzlingyin/LOCR.git
 cd LOCR
+go mod tidy
 go build
 ./locr
 ```
