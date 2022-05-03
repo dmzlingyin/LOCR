@@ -1,5 +1,5 @@
 <p align="center">
-     <img src="docs/demo.gif" width="506" alt="fx preview">
+     <img src="https://github.com/dmzlingyin/LOCR/blob/main/docs/demo.gif" width="506" alt="fx preview">
 </p>
 
 # 这个项目是什么？
