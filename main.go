@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	fmt.Println("locr starting working...")
+	fmt.Println("locr start working...")
 	go cmd.Watch()
 
 	sigCh := make(chan os.Signal, 1)
