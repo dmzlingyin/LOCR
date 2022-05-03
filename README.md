@@ -1,3 +1,7 @@
+<p align="center">
+     <img src="https://github.com/dmzlingyin/LOCR/blob/main/docs/demo.gif" width="506" alt="fx preview">
+</p>
+
 # 这个项目是什么？
 
 LOCR(Lightweight OCR)是一款轻量级的文字识别工具, 结合第三方截图工具, 可以快速的对图片文字进行识别。
