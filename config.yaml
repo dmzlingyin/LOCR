@@ -2,3 +2,7 @@
 ocrserver:
   address: "xxx"
   port: "xxx"
+
+# 开启自动识别
+autoreco: true
+
