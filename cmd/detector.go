@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"locr/server"
 	"log"
 	"os"
@@ -32,13 +33,6 @@ type ShotDetector struct {
 	Result string
 }
 
-func init() {
-	err := clipboard.Init()
-	if err != nil {
-		panic(err)
-	}
-}
-
 func (img *ImageDetector) Detect() {
 	for {
 		// 24小时监听剪贴板变化
@@ -53,12 +47,23 @@ func (img *ImageDetector) Detect() {
 
 func (img *ImageDetector) Recognation() {
 	if isImageFile(img.Data) {
-		res, err := imageRecognation(img.Data[7:])
+		reader, err := os.Open(img.Data[7:])
+		if err != nil {
+			log.Println(err)
+		}
+		defer reader.Close()
+
+		content, err := ioutil.ReadAll(reader)
+		if err != nil {
+			log.Println(err)
+		}
+
+		res, err := server.RecoBase64(content)
 		if err != nil {
 			log.Println(err)
 		} else {
-			img.Result = res
-			clipboard.Write(clipboard.FmtText, []byte(res))
+			img.Result = strings.Join(res.Value, "")
+			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
 	}
 }
@@ -77,23 +82,15 @@ func (shot *ShotDetector) Detect() {
 
 func (shot *ShotDetector) Recognation() {
 	if isImage(shot.Data) {
-		res, err := shotRecognation(shot.Data)
+		res, err := server.RecoBase64(shot.Data)
 		if err != nil {
 			log.Println(err)
 		} else {
-			shot.Result = res
+			shot.Result = strings.Join(res.Value, "")
 			fmt.Println(shot.Result)
-			clipboard.Write(clipboard.FmtText, []byte(res))
+			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}
 	}
-}
-
-func Watch() {
-	imageDetector := &ImageDetector{}
-	shotDetector := &ShotDetector{}
-
-	go imageDetector.Detect()
-	go shotDetector.Detect()
 }
 
 // isImageFile 判断文件内容是否为图片类型(png/jpg/tif/webp)
@@ -127,28 +124,17 @@ func isImage(content []byte) bool {
 	return false
 }
 
-// imageRecognation 对图片进行文字识别, 如果成功返回识别内容, 否则返回错误信息
-func imageRecognation(content string) (string, error) {
-	// 打开待识别图片
-	file, err := os.Open(content)
+func init() {
+	err := clipboard.Init()
 	if err != nil {
-		return "", err
+		panic(err)
 	}
-	defer file.Close()
-
-	// 图片识别
-	res, err := server.RecoFile(file)
-	if err != nil {
-		return "", err
-	}
-	return res.Result, nil
 }
 
-// shotRecognation 对截图进行文字识别, 如果成功返回识别内容, 否则返回错误信息
-func shotRecognation(content []byte) (string, error) {
-	res, err := server.RecoBase64(content)
-	if err != nil {
-		return "", err
-	}
-	return res.Text, nil
+func Watch() {
+	imageDetector := &ImageDetector{}
+	shotDetector := &ShotDetector{}
+
+	go imageDetector.Detect()
+	go shotDetector.Detect()
 }
