@@ -58,10 +58,7 @@ func (img *ImageDetector) Recognation() {
 			log.Println(err)
 		} else {
 			img.Result = res
-			// 识别结果写入剪贴板, 并等待写入成功
-			done := clipboard.Write(clipboard.FmtText, []byte(res))
-			fmt.Println(img.Result)
-			<-done
+			clipboard.Write(clipboard.FmtText, []byte(res))
 		}
 	}
 }
@@ -85,10 +82,8 @@ func (shot *ShotDetector) Recognation() {
 			log.Println(err)
 		} else {
 			shot.Result = res
-			// 识别结果写入剪贴板, 并等待写入成功
-			done := clipboard.Write(clipboard.FmtText, []byte(res))
 			fmt.Println(shot.Result)
-			<-done
+			clipboard.Write(clipboard.FmtText, []byte(res))
 		}
 	}
 }
@@ -155,5 +150,5 @@ func shotRecognation(content []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return res.Result, nil
+	return res.Text, nil
 }
