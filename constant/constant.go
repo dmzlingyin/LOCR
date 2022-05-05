@@ -14,7 +14,17 @@ const (
 )
 
 var (
-	PNG        = []byte{137, 80, 78, 71, 13, 10, 26, 10}
+	// png文件头4个字节, 文件尾4个字节
+	PNG = []byte{'\x89', '\x50', '\x4E', '\x47', '\xAE', '\x42', '\x60', '\x82'}
+	// jpg文件头4个字节, 文件尾2个字节
+	JPG = []byte{'\xFF', '\xD8', '\xFF', '\xE0', '\xFF', '\xD9'}
+	// bmp只有文件头
+	BMP = []byte{'\x42', '\x4D'}
+	// tiff只有文件头
+	TIFF = []byte{'\x49', '\x49', '\x2A', '\x00'}
+)
+
+var (
 	configPath string
 	version    bool
 	URL        string
