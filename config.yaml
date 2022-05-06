@@ -1,4 +1,0 @@
-# 设置OCR识别后台接口
-ocrserver:
-  address: "xxx"
-  port: "xxx"
