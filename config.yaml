@@ -1,0 +1,8 @@
+# 设置OCR识别后台接口
+ocrserver:
+  address: "xxx"
+  port: "xxx"
+
+# 开启自动识别
+autoreco: true
+
