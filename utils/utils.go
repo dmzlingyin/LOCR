@@ -3,6 +3,8 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"image"
+	"image/color"
 	"locr/server"
 	"strings"
 
@@ -86,4 +88,32 @@ func ExtractImage(raw *server.Result) bool {
 		fmt.Println(points)
 	}
 	return true
+}
+
+// extractPoints 提取识别结果的坐标点
+func extractPoints(raw *server.Result) [][]int {
+	res := [][]int{}
+	decReo := raw.Value[0]
+	splited := strings.Split(decReo, "]], [")
+	for _, item := range splited {
+		points := strings.Split(item, "), [")[1]
+		fmt.Println(points)
+	}
+	return res
+}
+
+// hline 画横线
+func hline(img image.RGBA, x1, y, x2 int, col color.Color) {
+	for x1 <= x2 {
+		img.Set(x1, y, col)
+		x1++
+	}
+}
+
+// vline 画竖线
+func vline(img image.RGBA, y1, x, y2 int, col color.Color) {
+	for y1 <= y2 {
+		img.Set(x, y1, col)
+		y1++
+	}
 }
