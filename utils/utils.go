@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"fmt"
 	"locr/server"
 	"strings"
 
@@ -78,5 +79,11 @@ func ExtractText(raw *server.Result) string {
 
 // ExtractImage 将识别结果保存为图片
 func ExtractImage(raw *server.Result) bool {
+	decReo := raw.Value[0]
+	splited := strings.Split(decReo, "]], [")
+	for _, item := range splited {
+		points := strings.Split(item, "), [")[1]
+		fmt.Println(points)
+	}
 	return true
 }

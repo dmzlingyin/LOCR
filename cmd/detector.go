@@ -59,6 +59,7 @@ func (img *ImageDetector) Recognation() {
 		if err != nil {
 			log.Println(err)
 		} else {
+			fmt.Println(utils.ExtractImage(res))
 			img.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
