@@ -55,6 +55,7 @@ func IsImage(content []byte) bool {
 	return false
 }
 
+// 如剪贴板无法使用，panic
 func init() {
 	err := clipboard.Init()
 	if err != nil {
@@ -76,6 +77,6 @@ func ExtractText(raw *server.Result) string {
 }
 
 // ExtractImage 将识别结果保存为图片
-func ExtractImage() {
-
+func ExtractImage(raw *server.Result) bool {
+	return true
 }

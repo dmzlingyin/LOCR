@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"locr/server"
 	"locr/utils"
@@ -82,6 +83,7 @@ func (shot *ShotDetector) Recognation() {
 		if err != nil {
 			log.Println(err)
 		} else {
+			fmt.Println(res)
 			shot.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}
