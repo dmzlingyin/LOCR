@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"image/color"
 	"locr/server"
@@ -86,24 +85,24 @@ func ExtractImage(raw *server.Result) bool {
 }
 
 // extractPoints 提取识别结果的坐标点
+// 例如: [28 18 155 15 155 29 28 32], 按顺序分组(0, 1), (2, 3), (4, 5), (6, 7), 分别代表检测结果的四个定位点: 左上, 右上, 左下, 右下
 func ExtractPoints(raw *server.Result) [][]int {
-	res := [][]int{}
 	decReo := raw.Value[0]
 	splited := strings.Split(decReo, "]], [")
+	res := make([][]int, len(splited))
 
 	for k, item := range splited {
-		res[k] = make([]int, 4)
+		res[k] = make([]int, 8)
 		points := strings.Split(item, "), [")[1]
 		lists := strings.Split(points, ", ")
 		for i, v := range lists {
 			if i%2 == 0 {
-				a, _ := strconv.Atoi(v[1:])
-				res[k][i] = a
+				a, _ := strconv.ParseFloat(v[1:], 64)
+				res[k][i] = int(a)
 			} else {
-				b, _ := strconv.Atoi(v[:len(v)-1])
-				res[k][i] = b
+				b, _ := strconv.ParseFloat(v[:len(v)-1], 64)
+				res[k][i] = int(b)
 			}
-			fmt.Println(res[k])
 		}
 	}
 	return res
