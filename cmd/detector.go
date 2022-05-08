@@ -15,7 +15,7 @@ import (
 
 type Detector interface {
 	Detect()
-	Recognation()
+	Recognition()
 }
 
 // 图片文件(存放在磁盘)
@@ -36,13 +36,13 @@ func (img *ImageDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		text := clipboard.Watch(ctx, clipboard.FmtText)
 		img.Data = string(<-text)
-		img.Recognation()
+		img.Recognition()
 
 		cancel()
 	}
 }
 
-func (img *ImageDetector) Recognation() {
+func (img *ImageDetector) Recognition() {
 	if utils.IsImageFile(img.Data) {
 		reader, err := os.Open(img.Data[7:])
 		if err != nil {
@@ -59,7 +59,7 @@ func (img *ImageDetector) Recognation() {
 		if err != nil {
 			log.Println(err)
 		} else {
-			fmt.Println(utils.ExtractImage(res))
+			fmt.Println(utils.ExtractPoints(res))
 			img.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
@@ -72,19 +72,19 @@ func (shot *ShotDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		img := clipboard.Watch(ctx, clipboard.FmtImage)
 		shot.Data = <-img
-		shot.Recognation()
+		shot.Recognition()
 
 		cancel()
 	}
 }
 
-func (shot *ShotDetector) Recognation() {
+func (shot *ShotDetector) Recognition() {
 	if utils.IsImage(shot.Data) {
 		res, err := server.RecoBase64(shot.Data)
 		if err != nil {
 			log.Println(err)
 		} else {
-			fmt.Println(res)
+			fmt.Println(utils.ExtractPoints(res))
 			shot.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}

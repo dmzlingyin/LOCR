@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/color"
 	"locr/server"
+	"strconv"
 	"strings"
 
 	C "locr/constant"
@@ -81,23 +82,29 @@ func ExtractText(raw *server.Result) string {
 
 // ExtractImage 将识别结果保存为图片
 func ExtractImage(raw *server.Result) bool {
-	decReo := raw.Value[0]
-	splited := strings.Split(decReo, "]], [")
-	for _, item := range splited {
-		points := strings.Split(item, "), [")[1]
-		fmt.Println(points)
-	}
 	return true
 }
 
 // extractPoints 提取识别结果的坐标点
-func extractPoints(raw *server.Result) [][]int {
+func ExtractPoints(raw *server.Result) [][]int {
 	res := [][]int{}
 	decReo := raw.Value[0]
 	splited := strings.Split(decReo, "]], [")
-	for _, item := range splited {
+
+	for k, item := range splited {
+		res[k] = make([]int, 4)
 		points := strings.Split(item, "), [")[1]
-		fmt.Println(points)
+		lists := strings.Split(points, ", ")
+		for i, v := range lists {
+			if i%2 == 0 {
+				a, _ := strconv.Atoi(v[1:])
+				res[k][i] = a
+			} else {
+				b, _ := strconv.Atoi(v[:len(v)-1])
+				res[k][i] = b
+			}
+			fmt.Println(res[k])
+		}
 	}
 	return res
 }
