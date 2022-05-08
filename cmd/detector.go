@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"locr/server"
 	"locr/utils"
@@ -59,7 +58,6 @@ func (img *ImageDetector) Recognition() {
 		if err != nil {
 			log.Println(err)
 		} else {
-			fmt.Println(utils.ExtractPoints(res))
 			img.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
@@ -84,7 +82,6 @@ func (shot *ShotDetector) Recognition() {
 		if err != nil {
 			log.Println(err)
 		} else {
-			fmt.Println(utils.ExtractPoints(res))
 			shot.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}

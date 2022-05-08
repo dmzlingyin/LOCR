@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"image"
 	"image/color"
+	"image/jpeg"
 	"locr/server"
+	"os"
+	"path"
 	"strconv"
 	"strings"
 
@@ -85,7 +88,7 @@ func ExtractImage(raw *server.Result) bool {
 }
 
 // extractPoints 提取识别结果的坐标点
-// 例如: [28 18 155 15 155 29 28 32], 按顺序分组(0, 1), (2, 3), (4, 5), (6, 7), 分别代表检测结果的四个定位点: 左上, 右上, 左下, 右下
+// 例如: [28 18 155 15 155 29 28 32], 按顺序分组(28, 18), (155, 15), (155, 29), (28, 32), 分别代表检测结果的四个定位点: 左上, 右上, 右下, 左下
 func ExtractPoints(raw *server.Result) [][]int {
 	decReo := raw.Value[0]
 	splited := strings.Split(decReo, "]], [")
@@ -106,6 +109,30 @@ func ExtractPoints(raw *server.Result) [][]int {
 		}
 	}
 	return res
+}
+
+// 将识别结果保存到图片 存放路径：home目录
+func saveResultToImage(imgByte []byte) error {
+	img, _, err := image.Decode(bytes.NewReader(imgByte))
+	if err != nil {
+		return err
+	}
+
+	homePath, err := os.UserCacheDir()
+	if err != nil {
+		return err
+	}
+	out, _ := os.Create(path.Join(homePath, "test.jpg"))
+	defer out.Close()
+
+	var opts jpeg.Options
+	opts.Quality = 1
+	err = jpeg.Encode(out, img, &opts)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // hline 画横线
