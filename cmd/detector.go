@@ -59,6 +59,7 @@ func (img *ImageDetector) Recognition() {
 			log.Println(err)
 		} else {
 			img.Result = utils.ExtractText(res)
+			utils.ExtractImage(content, res)
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
 	}
@@ -83,6 +84,7 @@ func (shot *ShotDetector) Recognition() {
 			log.Println(err)
 		} else {
 			shot.Result = utils.ExtractText(res)
+			utils.ExtractImage(shot.Data, res)
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}
 	}

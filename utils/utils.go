@@ -2,8 +2,10 @@ package utils
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"image/jpeg"
 	"locr/server"
 	"os"
@@ -83,8 +85,28 @@ func ExtractText(raw *server.Result) string {
 }
 
 // ExtractImage 将识别结果保存为图片
-func ExtractImage(raw *server.Result) bool {
-	return true
+func ExtractImage(data []byte, raw *server.Result) error {
+	img, _, err := image.Decode(bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	b := img.Bounds()
+	dst := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
+	draw.Draw(dst, dst.Bounds(), img, b.Min, draw.Src)
+	drawBox(dst, ExtractPoints(raw))
+	newImg := dst.SubImage(img.Bounds())
+
+	var opts jpeg.Options
+	opts.Quality = 1
+	buff := new(bytes.Buffer)
+	err = jpeg.Encode(buff, newImg, &opts)
+	if err != nil {
+		return err
+	}
+
+	saveResultToImage(buff.Bytes())
+	return nil
 }
 
 // extractPoints 提取识别结果的坐标点
@@ -98,6 +120,7 @@ func ExtractPoints(raw *server.Result) [][]int {
 		res[k] = make([]int, 8)
 		points := strings.Split(item, "), [")[1]
 		lists := strings.Split(points, ", ")
+
 		for i, v := range lists {
 			if i%2 == 0 {
 				a, _ := strconv.ParseFloat(v[1:], 64)
@@ -123,6 +146,7 @@ func saveResultToImage(imgByte []byte) error {
 		return err
 	}
 	out, _ := os.Create(path.Join(homePath, "test.jpg"))
+	fmt.Println(path.Join(homePath, "test.jpg"))
 	defer out.Close()
 
 	var opts jpeg.Options
@@ -135,8 +159,18 @@ func saveResultToImage(imgByte []byte) error {
 	return nil
 }
 
+// drawBox 绘制矩形框
+func drawBox(img *image.RGBA, points [][]int) {
+	for _, point := range points {
+		hline(img, point[0], point[1], point[2], color.Black)
+		hline(img, point[6], point[7], point[4], color.Black)
+		vline(img, point[1], point[0], point[7], color.Black)
+		vline(img, point[3], point[2], point[5], color.Black)
+	}
+}
+
 // hline 画横线
-func hline(img image.RGBA, x1, y, x2 int, col color.Color) {
+func hline(img *image.RGBA, x1, y, x2 int, col color.Color) {
 	for x1 <= x2 {
 		img.Set(x1, y, col)
 		x1++
@@ -144,7 +178,7 @@ func hline(img image.RGBA, x1, y, x2 int, col color.Color) {
 }
 
 // vline 画竖线
-func vline(img image.RGBA, y1, x, y2 int, col color.Color) {
+func vline(img *image.RGBA, y1, x, y2 int, col color.Color) {
 	for y1 <= y2 {
 		img.Set(x, y1, col)
 		y1++
