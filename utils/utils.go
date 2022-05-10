@@ -98,15 +98,14 @@ func ExtractImage(data []byte, raw *server.Result) error {
 	newImg := dst.SubImage(img.Bounds())
 
 	var opts jpeg.Options
-	opts.Quality = 1
+	opts.Quality = 100
 	buff := new(bytes.Buffer)
 	err = jpeg.Encode(buff, newImg, &opts)
 	if err != nil {
 		return err
 	}
 
-	saveResultToImage(buff.Bytes())
-	return nil
+	return saveResultToImage(buff.Bytes())
 }
 
 // extractPoints 提取识别结果的坐标点
@@ -150,7 +149,7 @@ func saveResultToImage(imgByte []byte) error {
 	defer out.Close()
 
 	var opts jpeg.Options
-	opts.Quality = 1
+	opts.Quality = 100
 	err = jpeg.Encode(out, img, &opts)
 	if err != nil {
 		return err
