@@ -94,7 +94,7 @@ func ExtractImage(data []byte, raw *server.Result) error {
 	b := img.Bounds()
 	dst := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
 	draw.Draw(dst, dst.Bounds(), img, b.Min, draw.Src)
-	drawBox(dst, ExtractPoints(raw))
+	drawBox(dst, extractPoints(raw))
 	newImg := dst.SubImage(img.Bounds())
 
 	var opts jpeg.Options
@@ -110,7 +110,7 @@ func ExtractImage(data []byte, raw *server.Result) error {
 
 // extractPoints 提取识别结果的坐标点
 // 例如: [28 18 155 15 155 29 28 32], 按顺序分组(28, 18), (155, 15), (155, 29), (28, 32), 分别代表检测结果的四个定位点: 左上, 右上, 右下, 左下
-func ExtractPoints(raw *server.Result) [][]int {
+func extractPoints(raw *server.Result) [][]int {
 	decReo := raw.Value[0]
 	splited := strings.Split(decReo, "]], [")
 	res := make([][]int, len(splited))
