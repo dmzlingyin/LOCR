@@ -160,11 +160,12 @@ func saveResultToImage(imgByte []byte) error {
 
 // drawBox 绘制矩形框
 func drawBox(img *image.RGBA, points [][]int) {
-	for _, point := range points {
-		hline(img, point[0], point[1], point[2], color.Black)
-		hline(img, point[6], point[7], point[4], color.Black)
-		vline(img, point[1], point[0], point[7], color.Black)
-		vline(img, point[3], point[2], point[5], color.Black)
+	for k, point := range points {
+		rColor := C.Colors[k%len(C.Colors)]
+		hline(img, point[0], point[1], point[2], rColor)
+		hline(img, point[6], point[7], point[4], rColor)
+		vline(img, point[1], point[0], point[7], rColor)
+		vline(img, point[3], point[2], point[5], rColor)
 	}
 }
 

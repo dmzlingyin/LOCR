@@ -3,6 +3,7 @@ package constant
 import (
 	"flag"
 	"fmt"
+	"image/color"
 	"log"
 	"os"
 
@@ -28,6 +29,11 @@ var (
 	configPath string
 	version    bool
 	URL        string
+)
+
+var (
+	// red, green, blue
+	Colors = []color.RGBA{{255, 0, 0, 200}, {0, 255, 0, 200}, {0, 0, 255, 200}}
 )
 
 func init() {
