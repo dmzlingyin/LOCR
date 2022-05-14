@@ -3,13 +3,14 @@ package cmd
 import (
 	"context"
 	"io/ioutil"
-	"locr/server"
-	"locr/utils"
 	"log"
 	"os"
 	"time"
 
 	"golang.design/x/clipboard"
+
+	"locr/server"
+	"locr/utils"
 )
 
 type Detector interface {
