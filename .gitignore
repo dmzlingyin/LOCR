@@ -1,6 +1,9 @@
 *.exe
 *.dll
 *.so
+*.jpg
+*.png
+*.tif
 locr
 
 pconfig.yaml

@@ -27,6 +27,7 @@ var (
 
 var (
 	configPath string
+	IsSave     bool
 	version    bool
 	URL        string
 )
@@ -39,6 +40,7 @@ var (
 func init() {
 	flag.StringVar(&configPath, "p", "./pconfig.yaml", "specify config file path")
 	flag.BoolVar(&version, "v", false, "show current version of locr")
+	flag.BoolVar(&IsSave, "f", false, "is save to file.")
 	flag.Parse()
 	viper.SetConfigFile(configPath)
 
