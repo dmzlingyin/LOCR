@@ -14,6 +14,10 @@ func RecoPipe(r io.Reader) {
 	if err != nil {
 		log.Println(err)
 	}
+	if !utils.IsImage(b) {
+		log.Println("The file you input is not an image.")
+		return
+	}
 
 	res, err := server.RecoBase64(b)
 	if err != nil {
