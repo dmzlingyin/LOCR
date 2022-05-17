@@ -30,6 +30,7 @@ var (
 	IsSave     bool
 	version    bool
 	URL        string
+	AutoReco   bool
 )
 
 var (
@@ -64,4 +65,6 @@ func init() {
 	addr := viper.GetStringMapString("ocrserver")["address"]
 	port := viper.GetStringMapString("ocrserver")["port"]
 	URL = addr + ":" + port + "/"
+
+	AutoReco = viper.GetBool("autoreco")
 }
