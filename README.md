@@ -33,7 +33,7 @@ go build
 then you can type locr on you terminal to use it.
 
 # Examples
-If you use locr normaly, just run it. If you just want to extact an image, see follow:
+If you use locr normaly, just run it. If you just want to extract text from an image, see follow:
 ```shell
 cat xxx.jpg | locr -f
 
