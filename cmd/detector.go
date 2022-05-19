@@ -9,6 +9,7 @@ import (
 
 	"golang.design/x/clipboard"
 
+	C "locr/constant"
 	"locr/server"
 	"locr/utils"
 )
@@ -36,8 +37,10 @@ func (img *ImageDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		text := clipboard.Watch(ctx, clipboard.FmtText)
 		img.Data = string(<-text)
-		img.Recognition()
 
+		if C.AutoReco {
+			img.Recognition()
+		}
 		cancel()
 	}
 }
@@ -75,8 +78,10 @@ func (shot *ShotDetector) Detect() {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
 		img := clipboard.Watch(ctx, clipboard.FmtImage)
 		shot.Data = <-img
-		shot.Recognition()
 
+		if C.AutoReco {
+			shot.Recognition()
+		}
 		cancel()
 	}
 }
