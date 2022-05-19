@@ -43,5 +43,5 @@ cat xxx.jpg | locr -f > text.txt
 
 # TODO
 
-- [ ] hotkey
+- [x] hotkey
 - [ ] offline version
