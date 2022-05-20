@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"log"
 
+	"locr/pkg/log"
 	"locr/pkg/utils"
 	"locr/server"
 )
@@ -13,16 +13,16 @@ import (
 func RecoPipe(r io.Reader) {
 	b, err := io.ReadAll(r)
 	if err != nil {
-		log.Println(err)
+		log.ErrorLogger.Println(err)
 	}
 	if !utils.IsImage(b) {
-		log.Println("The file you input is not an image.")
+		log.WarningLogger.Println("File is not an image.")
 		return
 	}
 
 	res, err := server.RecoBase64(b)
 	if err != nil {
-		log.Println(err)
+		log.ErrorLogger.Println(err)
 	}
 
 	fmt.Println(utils.ExtractText(res))

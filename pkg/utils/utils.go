@@ -7,13 +7,13 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
-	"locr/server"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 
 	C "locr/constant"
+	"locr/server"
 
 	"golang.design/x/clipboard"
 )

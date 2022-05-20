@@ -1,12 +1,11 @@
 package hotkey
 
 import (
-	"log"
-
 	"golang.design/x/hotkey"
 	"golang.design/x/hotkey/mainthread"
 
 	C "locr/constant"
+	"locr/pkg/log"
 )
 
 func init() {
@@ -18,7 +17,7 @@ func fn() {
 	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyO)
 	err := hk.Register()
 	if err != nil {
-		log.Println(err)
+		log.ErrorLogger.Println(err)
 	}
 
 	for {

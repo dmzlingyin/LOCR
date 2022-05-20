@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
 
 	"golang.design/x/clipboard"
 
 	C "locr/constant"
+	"locr/pkg/log"
 	"locr/pkg/utils"
 	"locr/server"
 )
@@ -49,23 +49,23 @@ func (img *ImageDetector) Recognition() {
 	if utils.IsImageFile(img.Data) {
 		reader, err := os.Open(img.Data[7:])
 		if err != nil {
-			log.Println(err)
+			log.ErrorLogger.Println(err)
 		}
 		defer reader.Close()
 
 		content, err := ioutil.ReadAll(reader)
 		if err != nil {
-			log.Println(err)
+			log.ErrorLogger.Println(err)
 		}
 
 		res, err := server.RecoBase64(content)
 		if err != nil {
-			log.Println(err)
+			log.ErrorLogger.Println(err)
 		} else {
 			img.Result = utils.ExtractText(res)
 			err = utils.ExtractImage(content, res)
 			if err != nil {
-				log.Println(err)
+				log.ErrorLogger.Println(err)
 			}
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
@@ -90,12 +90,12 @@ func (shot *ShotDetector) Recognition() {
 	if utils.IsImage(shot.Data) {
 		res, err := server.RecoBase64(shot.Data)
 		if err != nil {
-			log.Println(err)
+			log.ErrorLogger.Println(err)
 		} else {
 			shot.Result = utils.ExtractText(res)
 			err = utils.ExtractImage(shot.Data, res)
 			if err != nil {
-				log.Println(err)
+				log.ErrorLogger.Println(err)
 			}
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}

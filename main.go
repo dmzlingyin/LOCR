@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"locr/cmd"
 	"os"
 	"os/signal"
@@ -9,6 +8,7 @@ import (
 
 	C "locr/constant"
 	_ "locr/pkg/hotkey"
+	"locr/pkg/log"
 )
 
 func main() {
@@ -18,8 +18,8 @@ func main() {
 		return
 	}
 
-	fmt.Println("locr start working...")
 	go cmd.Watch()
+	log.InfoLogger.Println("locr start working...")
 
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
