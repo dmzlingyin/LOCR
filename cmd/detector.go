@@ -10,8 +10,8 @@ import (
 	"golang.design/x/clipboard"
 
 	C "locr/constant"
+	"locr/pkg/utils"
 	"locr/server"
-	"locr/utils"
 )
 
 type Detector interface {

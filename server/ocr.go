@@ -5,8 +5,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	C "locr/constant"
 	"net/http"
+
+	C "locr/constant"
 )
 
 type PaddleOCR struct {

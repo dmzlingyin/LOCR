@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"locr/cmd"
-	C "locr/constant"
-	"locr/utils"
 	"os"
 	"os/signal"
 	"syscall"
+
+	C "locr/constant"
+	_ "locr/pkg/hotkey"
 )
 
 func main() {
@@ -18,7 +19,6 @@ func main() {
 	}
 
 	fmt.Println("locr start working...")
-	go utils.Init()
 	go cmd.Watch()
 
 	sigCh := make(chan os.Signal, 1)

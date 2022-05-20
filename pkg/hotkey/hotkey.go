@@ -1,4 +1,4 @@
-package utils
+package hotkey
 
 import (
 	"log"
@@ -9,8 +9,8 @@ import (
 	C "locr/constant"
 )
 
-func Init() {
-	mainthread.Init(fn)
+func init() {
+	go mainthread.Init(fn)
 }
 
 // 热键：Ctrl + Shift + O, 控制自动识别开关
