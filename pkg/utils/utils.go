@@ -14,8 +14,6 @@ import (
 
 	C "locr/constant"
 	"locr/server"
-
-	"golang.design/x/clipboard"
 )
 
 // IsImageFile 判断文件内容是否为图片类型(png/jpg/tif/webp)
@@ -61,14 +59,6 @@ func IsImage(content []byte) bool {
 		return true
 	}
 	return false
-}
-
-// 如剪贴板无法使用，panic
-func init() {
-	err := clipboard.Init()
-	if err != nil {
-		panic(err)
-	}
 }
 
 // ExtractText 提取识别结果的文本

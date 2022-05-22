@@ -1,11 +1,11 @@
 package main
 
 import (
-	"locr/cmd"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"locr/cmd"
 	C "locr/constant"
 	_ "locr/pkg/hotkey"
 	"locr/pkg/log"
