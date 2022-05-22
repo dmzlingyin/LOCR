@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"time"
@@ -113,11 +114,12 @@ func (shot *ShotDetector) Recognition() {
 	}
 }
 
-// 如剪贴板无法使用，panic
+// 如剪贴板无法使用, 退出程序
 func init() {
 	err := clipboard.Init()
 	if err != nil {
-		panic(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }
 
