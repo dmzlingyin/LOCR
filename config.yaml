@@ -1,7 +1,7 @@
 # 设置OCR识别后台接口
 ocrserver:
-  address: "xxx"
-  port: "xxx"
+  address: "http://172.17.130.166"
+  port: "9998"
 
 # 开启自动识别
 autoreco: true
