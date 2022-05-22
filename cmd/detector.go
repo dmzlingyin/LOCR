@@ -69,6 +69,8 @@ func (img *ImageDetector) Recognition() {
 			}
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
 		}
+	} else {
+		log.InfoLogger.Println("new content of clipboard is not a image file.")
 	}
 }
 
@@ -99,6 +101,8 @@ func (shot *ShotDetector) Recognition() {
 			}
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 		}
+	} else {
+		log.InfoLogger.Println("new content of clipboard is not a shot image.")
 	}
 }
 
