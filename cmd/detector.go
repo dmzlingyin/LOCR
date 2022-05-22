@@ -106,6 +106,14 @@ func (shot *ShotDetector) Recognition() {
 	}
 }
 
+// 如剪贴板无法使用，panic
+func init() {
+	err := clipboard.Init()
+	if err != nil {
+		panic(err)
+	}
+}
+
 func Watch() {
 	imageDetector := &ImageDetector{}
 	shotDetector := &ShotDetector{}
