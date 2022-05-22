@@ -63,11 +63,15 @@ func (img *ImageDetector) Recognition() {
 			log.ErrorLogger.Println(err)
 		} else {
 			img.Result = utils.ExtractText(res)
-			err = utils.ExtractImage(content, res)
-			if err != nil {
-				log.ErrorLogger.Println(err)
-			}
 			clipboard.Write(clipboard.FmtText, []byte(img.Result))
+
+			// 将检测结果保存为图片
+			go func() {
+				err = utils.ExtractImage(content, res)
+				if err != nil {
+					log.ErrorLogger.Println(err)
+				}
+			}()
 		}
 	} else {
 		log.InfoLogger.Println("new content of clipboard is not a image file.")
@@ -95,11 +99,14 @@ func (shot *ShotDetector) Recognition() {
 			log.ErrorLogger.Println(err)
 		} else {
 			shot.Result = utils.ExtractText(res)
-			err = utils.ExtractImage(shot.Data, res)
-			if err != nil {
-				log.ErrorLogger.Println(err)
-			}
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
+
+			go func() {
+				err = utils.ExtractImage(shot.Data, res)
+				if err != nil {
+					log.ErrorLogger.Println(err)
+				}
+			}()
 		}
 	} else {
 		log.InfoLogger.Println("new content of clipboard is not a shot image.")
