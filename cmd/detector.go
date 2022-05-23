@@ -21,18 +21,19 @@ type Detector interface {
 }
 
 // 图片文件(存放在磁盘)
-type ImageDetector struct {
+type imageDetector struct {
 	Data   string
 	Result string
 }
 
 // 截图(存放在内存)
-type ShotDetector struct {
+type shotDetector struct {
 	Data   []byte
 	Result string
 }
 
-func (img *ImageDetector) Detect() {
+// 实现Detector接口Detect方法
+func (img *imageDetector) Detect() {
 	for {
 		// 24小时监听剪贴板变化
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
@@ -46,7 +47,8 @@ func (img *ImageDetector) Detect() {
 	}
 }
 
-func (img *ImageDetector) Recognition() {
+// 实现Detector接口Recognition方法
+func (img *imageDetector) Recognition() {
 	if utils.ImageFileType(img.Data) != -1 {
 		reader, err := os.Open(img.Data[7:])
 		if err != nil {
@@ -79,7 +81,8 @@ func (img *ImageDetector) Recognition() {
 	}
 }
 
-func (shot *ShotDetector) Detect() {
+// 实现Detector接口Detect方法
+func (shot *shotDetector) Detect() {
 	for {
 		// 24小时监听剪贴板变化
 		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
@@ -93,7 +96,8 @@ func (shot *ShotDetector) Detect() {
 	}
 }
 
-func (shot *ShotDetector) Recognition() {
+// 实现Detector接口Recognition方法
+func (shot *shotDetector) Recognition() {
 	if utils.ImageType(shot.Data) != -1 {
 		res, err := server.RecoBase64(shot.Data)
 		if err != nil {
@@ -123,9 +127,10 @@ func init() {
 	}
 }
 
+// 监听剪贴板主函数
 func Watch() {
-	imageDetector := &ImageDetector{}
-	shotDetector := &ShotDetector{}
+	imageDetector := &imageDetector{}
+	shotDetector := &shotDetector{}
 
 	go imageDetector.Detect()
 	go shotDetector.Detect()

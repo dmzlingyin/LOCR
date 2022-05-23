@@ -10,11 +10,13 @@ import (
 	C "locr/constant"
 )
 
+// OCR请求参数列表
 type PaddleOCR struct {
 	Key   []string `json:"key"`
 	Value []string `json:"value"`
 }
 
+// OCR识别结果结构体
 type Result struct {
 	ErrNo   int      `json:"err_no"`
 	ErrMsg  string   `json:"err_msg"`
@@ -23,6 +25,7 @@ type Result struct {
 	Tensors []string `json:"tensors"`
 }
 
+// RecoBase64请求服务端, 对base64格式的图片进行OCR识别
 func RecoBase64(img []byte) (*Result, error) {
 	// 对图片base64编码
 	body := base64.StdEncoding.EncodeToString(img)
