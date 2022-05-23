@@ -7,58 +7,67 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
+	"image/png"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+	"time"
 
 	C "locr/constant"
 	"locr/server"
 )
 
+const (
+	PNG = iota
+	JPG
+	TIF
+	BMP
+)
+
 // IsImageFile 判断文件内容是否为图片类型(png/jpg/tif/webp)
-func IsImageFile(content string) bool {
+func IsImageFile(content string) int {
 	if strings.HasPrefix(content, "file://") {
 		switch content[len(content)-4:] {
 		case ".png":
-			return true
+			return PNG
 		case ".jpg":
-			return true
+			return JPG
 		case ".tif":
-			return true
+			return TIF
 		case ".bmp":
-			return true
+			return BMP
 		default:
-			return false
+			return -1
 		}
 	}
-	return false
+	return -1
 }
 
 // IsImage 判断剪贴板内容是否为图片类型(png/jpg/tif/webp)
-func IsImage(content []byte) bool {
+func IsImage(content []byte) int {
 	// 信息太少, 无法判断
 	if len(content) < 10 {
-		return false
+		return -1
 	}
 
 	// content 是否为png类型
 	if bytes.Equal(content[:4], C.PNG[:4]) && bytes.Equal(content[len(content)-4:], C.PNG[4:]) {
-		return true
+		return PNG
 	}
 	// content 是否为jpg类型
 	if bytes.Equal(content[:4], C.JPG[:4]) && bytes.Equal(content[len(content)-2:], C.JPG[4:]) {
-		return true
-	}
-	// content 是否为bmp类型
-	if bytes.Equal(content[:2], C.BMP) {
-		return true
+		return JPG
 	}
 	// content 是否为tiff类型
 	if bytes.Equal(content[:4], C.TIFF) {
-		return true
+		return TIF
 	}
-	return false
+	// content 是否为bmp类型
+	if bytes.Equal(content[:2], C.BMP) {
+		return BMP
+	}
+	return -1
 }
 
 // ExtractText 提取识别结果的文本
@@ -87,10 +96,9 @@ func ExtractImage(data []byte, raw *server.Result) error {
 	drawBox(dst, extractPoints(raw))
 	newImg := dst.SubImage(img.Bounds())
 
-	var opts jpeg.Options
-	opts.Quality = 100
 	buff := new(bytes.Buffer)
-	err = jpeg.Encode(buff, newImg, &opts)
+	// png 支持任意image.Image类型 jpg.Encode只支持jpg类型
+	err = png.Encode(buff, newImg)
 	if err != nil {
 		return err
 	}
@@ -134,8 +142,10 @@ func saveResultToImage(imgByte []byte) error {
 	if err != nil {
 		return err
 	}
-	out, _ := os.Create(path.Join(homePath, "test.jpg"))
-	fmt.Println(path.Join(homePath, "test.jpg"))
+
+	name := time.Now().Format("2006-01-02 15:04:05")
+	out, _ := os.Create(path.Join(homePath, name+".jpg"))
+	fmt.Println(path.Join(homePath, name+".jpg"))
 	defer out.Close()
 
 	var opts jpeg.Options

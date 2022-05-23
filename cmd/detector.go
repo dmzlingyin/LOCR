@@ -47,7 +47,7 @@ func (img *ImageDetector) Detect() {
 }
 
 func (img *ImageDetector) Recognition() {
-	if utils.IsImageFile(img.Data) {
+	if utils.IsImageFile(img.Data) != -1 {
 		reader, err := os.Open(img.Data[7:])
 		if err != nil {
 			log.ErrorLogger.Println(err)
@@ -94,7 +94,7 @@ func (shot *ShotDetector) Detect() {
 }
 
 func (shot *ShotDetector) Recognition() {
-	if utils.IsImage(shot.Data) {
+	if utils.IsImage(shot.Data) != -1 {
 		res, err := server.RecoBase64(shot.Data)
 		if err != nil {
 			log.ErrorLogger.Println(err)
