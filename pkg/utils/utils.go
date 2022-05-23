@@ -25,8 +25,8 @@ const (
 	BMP
 )
 
-// IsImageFile 判断文件内容是否为图片类型(png/jpg/tif/webp)
-func IsImageFile(content string) int {
+// ImageFileType 判断文件内容是否为图片文件, 返回文件类型(png/jpg/tif/webp)
+func ImageFileType(content string) int {
 	if strings.HasPrefix(content, "file://") {
 		switch content[len(content)-4:] {
 		case ".png":
@@ -44,8 +44,8 @@ func IsImageFile(content string) int {
 	return -1
 }
 
-// IsImage 判断剪贴板内容是否为图片类型(png/jpg/tif/webp)
-func IsImage(content []byte) int {
+// ImageType 判断剪贴板内容是否为图片类型, 返回图片类型(png/jpg/tif/webp)
+func ImageType(content []byte) int {
 	// 信息太少, 无法判断
 	if len(content) < 10 {
 		return -1

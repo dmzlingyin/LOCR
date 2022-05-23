@@ -15,7 +15,7 @@ func RecoPipe(r io.Reader) {
 	if err != nil {
 		log.ErrorLogger.Println(err)
 	}
-	if utils.IsImage(b) != -1 {
+	if utils.ImageType(b) == -1 {
 		log.WarningLogger.Println("File is not an image.")
 		return
 	}
