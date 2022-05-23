@@ -23,5 +23,10 @@ func fn() {
 	for {
 		<-hk.Keydown()
 		C.AutoReco = !C.AutoReco
+		if C.AutoReco {
+			log.InfoLogger.Println("autoreco on")
+		} else {
+			log.InfoLogger.Println("autoreco off")
+		}
 	}
 }
