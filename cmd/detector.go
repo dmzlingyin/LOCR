@@ -34,17 +34,17 @@ type shotDetector struct {
 
 // 实现Detector接口Detect方法
 func (img *imageDetector) Detect() {
-	for {
-		// 24小时监听剪贴板变化
-		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
-		text := clipboard.Watch(ctx, clipboard.FmtText)
-		img.Data = string(<-text)
-
+	// 24小时监听剪贴板变化
+	ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
+	text := clipboard.Watch(ctx, clipboard.FmtText)
+	for data := range text {
+		img.Data = string(data)
 		if C.AutoReco {
 			img.Recognition()
 		}
-		cancel()
 	}
+
+	cancel()
 }
 
 // 实现Detector接口Recognition方法
@@ -62,6 +62,9 @@ func (img *imageDetector) Recognition() {
 		}
 
 		res, err := server.RecoBase64(content)
+		if len(res.Value[0]) < 5 {
+			return
+		}
 		if err != nil {
 			log.ErrorLogger.Println(err)
 		} else {
@@ -83,17 +86,17 @@ func (img *imageDetector) Recognition() {
 
 // 实现Detector接口Detect方法
 func (shot *shotDetector) Detect() {
-	for {
-		// 24小时监听剪贴板变化
-		ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
-		img := clipboard.Watch(ctx, clipboard.FmtImage)
-		shot.Data = <-img
-
+	// 24小时监听剪贴板变化
+	ctx, cancel := context.WithTimeout(context.Background(), time.Hour*24)
+	img := clipboard.Watch(ctx, clipboard.FmtImage)
+	for data := range img {
+		shot.Data = data
 		if C.AutoReco {
 			shot.Recognition()
 		}
-		cancel()
 	}
+
+	cancel()
 }
 
 // 实现Detector接口Recognition方法
@@ -103,6 +106,10 @@ func (shot *shotDetector) Recognition() {
 		if err != nil {
 			log.ErrorLogger.Println(err)
 		} else {
+			if len(res.Value[0]) < 5 {
+				return
+			}
+
 			shot.Result = utils.ExtractText(res)
 			clipboard.Write(clipboard.FmtText, []byte(shot.Result))
 
