@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"image/color"
-	"log"
 	"os"
 
 	"github.com/spf13/viper"
@@ -39,15 +38,11 @@ var (
 )
 
 func init() {
-	flag.StringVar(&configPath, "p", "/home/lingyin/.config/locr/config.yaml", "specify config file path")
+	flag.StringVar(&configPath, "p", "config.yaml", "specify config file path")
 	flag.BoolVar(&version, "v", false, "show current version of locr")
 	flag.BoolVar(&IsSave, "f", false, "is save to file.")
 	flag.Parse()
 	viper.SetConfigFile(configPath)
-
-	if len(flag.Args()) != 0 {
-		flag.PrintDefaults()
-	}
 
 	if version {
 		fmt.Println(VERSION)
@@ -56,15 +51,15 @@ func init() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Fatal("no config founded.")
+			fmt.Println("no config founded, you shuld use: locr -p path/to/config.yaml")
 		} else {
-			log.Fatal("config read failed.")
+			fmt.Println("config read failed, you can try: locr -p path/to/config.yaml")
 		}
 		os.Exit(1)
 	}
+
 	addr := viper.GetStringMapString("ocrserver")["address"]
 	port := viper.GetStringMapString("ocrserver")["port"]
 	URL = addr + ":" + port + "/"
-
 	AutoReco = viper.GetBool("autoreco")
 }
